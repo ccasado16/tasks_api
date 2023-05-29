@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from tasks.models import Task
@@ -9,14 +8,14 @@ from rest_framework.parsers import JSONParser
 # Create your views here.
 @csrf_exempt
 def tasks(request):
-    """List all tasks"""
+    # List all tasks
     if request.method == "GET":
         tasks = Task.objects.all()
         serializer = TaskSerializer(tasks, many=True)
 
         return JsonResponse(serializer.data, safe=False)
     
-    """Create a new task"""
+    # Create a new task
     elif (request.method =="POST"):
         # parse the incoming information to django
         data = JSONParser().parse(request)
@@ -36,6 +35,7 @@ def task_detail(request, pk):
     except: 
         return HttpResponse(status=404)
 
+    # Edit a task
     if (request.method == "PUT"):
         # parse the incoming information
         data = JSONParser().parse(request)
@@ -48,6 +48,7 @@ def task_detail(request, pk):
         
         return JsonResponse(serializer.errors, status=400)
     
+    # Delet a task
     elif (request.method == "DELETE"):
         task.delete()
         return HttpResponse(status=204)
